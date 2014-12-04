@@ -1,0 +1,23 @@
+% test data for k-means
+%
+@relation 'Football'
+@attribute Contry string
+@attribute result1 numeric
+@attribute result2 numeric
+@attribute result3 numeric
+@data
+ZhongGuo,1,1,0.5
+RiBen,0.3,0,0.19
+HanGuo,0,0.15,0.13
+YiLang,0.24,0.76,0.25
+ShaTe,0.3,0.76,0.06
+YiLaKe,1,1,0
+KaTaEr,1,0.76,0.5
+ALianQiu,1,0.76,0.5
+WuZiBeKe,0.7,0.76,0.25
+TaiGuo,1,1,0.5
+YueNan,1,1,0.25
+AMan,1,1,0.5
+BaLin,0.7,0.76,0.5
+ChaoXian,0.7,0.68,1
+YinMi,1,1,0.5
