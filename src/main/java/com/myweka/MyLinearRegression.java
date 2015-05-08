@@ -65,6 +65,7 @@ public class MyLinearRegression {
         LinearRegression lr = new LinearRegression();
         // 训练分类器
         lr.buildClassifier(insTrain);
+        
         // 评估线性回归的结果
         Evaluation eval = new Evaluation(insTrain);
         eval.evaluateModel(lr, insTrain);// 评估结果
