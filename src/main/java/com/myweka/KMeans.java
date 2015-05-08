@@ -1,12 +1,7 @@
 package com.myweka;
 
 import java.io.File;
-import java.io.Reader;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
-import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.SimpleKMeans;
 import weka.core.DistanceFunction;
 import weka.core.Instance;
@@ -19,16 +14,15 @@ public class KMeans {
     
     public static void main(String[] args) {
     	try {
-    	
 	    	ArffLoader loader = new ArffLoader();
-	    	loader.setFile(new File("data/kmeans.arff"));
+	    	loader.setFile(new File("data/kmeans_no_normalize.arff"));
 	    	
 	    	Instances data =  loader.getDataSet();
 	    	data.deleteStringAttributes();
+	    	
 	    	SimpleKMeans simpleKMeans = new SimpleKMeans();
 	    	// 设置聚类要得到的类别数量
 	    	simpleKMeans.setNumClusters(3);
-	    	simpleKMeans.setDontReplaceMissingValues(true);
 	    	
 	    	// 函数设置聚类算法内部的距离计算方式
 	    	DistanceFunction m_DistanceFunction = new EuclideanDistance();
@@ -42,10 +36,16 @@ public class KMeans {
 	        System.out.println("聚类中心:");
 	        System.out.println("CentroIds: " + tempIns);
 	        
-	        Instance ins = new Instance(data.firstInstance());
-	    	int i = simpleKMeans.clusterInstance(ins);
-	    	System.out.println("China Football is level " + i);
-	    	
+	        System.out.println("------ Level ------");
+	        int totalCount = data.numInstances();
+	        for (int i=0; i<totalCount; i++) {
+	        	Instance currIns = data.instance(i);
+	        	System.out.println(simpleKMeans.clusterInstance(currIns)); //currIns + " <-> " + 
+	        }
+	        
+//	        Instance ins = new Instance(data.firstInstance());
+//	    	int i = simpleKMeans.clusterInstance(ins);
+//	    	System.out.println("China Football is level " + i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
