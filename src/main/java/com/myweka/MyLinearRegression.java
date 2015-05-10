@@ -4,6 +4,7 @@ import java.io.File;
 
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.LinearRegression;
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -16,11 +17,11 @@ import weka.core.converters.ConverterUtils.DataSource;
  */
 public class MyLinearRegression {
     public static void main(String[] args) throws Exception {
-        String dataFile = "data/chepai.arff";
-        //演示如何获取ARFF文件中样本数据定义格式信息
-        String arffFileDef = parseArffFile(dataFile);
-        System.out.println(arffFileDef);
-        System.out.println();
+        String dataFile = "data/chepai2014_2015.arff";
+//        //演示如何获取ARFF文件中样本数据定义格式信息
+//        String arffFileDef = parseArffFile(dataFile);
+//        System.out.println(arffFileDef);
+//        System.out.println();
                                  
         //演示如何从ARFF文件中挖掘数据联系（公式）以及给出数学概率的评定
         String evalResult = doLinearRegression(dataFile);
@@ -40,6 +41,7 @@ public class MyLinearRegression {
         //载入文件内容，获取其数据集合
         loader.setSource(new File(filePath));
         Instances data = loader.getDataSet();
+        data.deleteStringAttributes();
                                                                                    
         //封装字符串的文件内容返回对象
         StringBuilder sb = new StringBuilder();
@@ -59,8 +61,13 @@ public class MyLinearRegression {
         DataSource train_data = new DataSource(filePath);
         // 获取训练数据集
         Instances insTrain = train_data.getDataSet();
+        insTrain.deleteStringAttributes();
+//        System.out.println(insTrain.toString());
+        insTrain.deleteAttributeAt(2);
+        System.out.println(insTrain.toString());
+        
         // 设置训练集中，target的index
-        insTrain.setClassIndex(insTrain.numAttributes() - 1);
+        insTrain.setClassIndex(1); //insTrain.numAttributes() - 1
         // 定义分类器的类型 , 我们采用线性回归
         LinearRegression lr = new LinearRegression();
         // 训练分类器
@@ -73,6 +80,13 @@ public class MyLinearRegression {
         StringBuilder sb = new StringBuilder();
         sb.append("机器学习后产生的线性回归公式:\n" + lr.toString() + "\n\n");
         sb.append("评估此结果:" + eval.toSummaryString() + "\n");
+        
+        int count = insTrain.numInstances();
+        for (int i = 0; i < count; i++) {
+        	double ret = lr.classifyInstance(insTrain.instance(i));
+        	System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1));
+		}
+        
         return sb.toString();
     }
     
