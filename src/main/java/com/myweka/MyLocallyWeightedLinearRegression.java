@@ -5,6 +5,7 @@ import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.lazy.LWL;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.SparseInstance;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.neighboursearch.KDTree;
 
@@ -34,11 +35,10 @@ public class MyLocallyWeightedLinearRegression {
     public static String dataFile = "data/chepai2014_2015.arff";
     
     public static void main(String[] args) throws Exception {
-        // TODO Auto-generated method stub
      // set the method for local regression
         lwl.setClassifier(new LinearRegression());
         // set number of nearest neighbours to be used for local prediction
-        lwl.setKNN(5); // 10 by default
+        lwl.setKNN(6); // 10 by default
         // set weighting kernel method (see comments on constants)
         lwl.setWeightingKernel(LINEAR);
         // set KDTree as nearest neighbour search method
@@ -50,8 +50,8 @@ public class MyLocallyWeightedLinearRegression {
         Instances insTrain = train_data.getDataSet();
         insTrain.deleteStringAttributes();
 //        System.out.println(insTrain.toString());
-        insTrain.deleteAttributeAt(2);
-        insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
+        insTrain.deleteAttributeAt(2); // remove avg_price
+//        insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
         System.out.println(insTrain.toString());
         
         // 设置训练集中，target的index  (测试数据中被预测的字段)
@@ -76,9 +76,14 @@ public class MyLocallyWeightedLinearRegression {
                 System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1));
             }
             
+            double[] queryVector = new double[]{7482, 0, 152298, 75200, 10.15};
+            Instance ins = new SparseInstance(1, queryVector);
+            ins.setDataset(insTrain);
+            double ret = lwl.classifyInstance(ins);
+            System.out.println(ret);
+            
         } catch (Exception e) {
             e.printStackTrace();
-            // TODO: handle exception
         }
     }
     

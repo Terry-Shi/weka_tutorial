@@ -64,7 +64,7 @@ public class MyLinearRegression {
         insTrain.deleteStringAttributes();
 //        System.out.println(insTrain.toString());
         insTrain.deleteAttributeAt(2);
-        insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
+        //insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
         System.out.println(insTrain.toString());
         
         // 设置训练集中，target的index  (测试数据中被预测的字段)
