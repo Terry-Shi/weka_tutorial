@@ -3,6 +3,7 @@ package com.myweka;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.lazy.LWL;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SparseInstance;
@@ -38,7 +39,7 @@ public class MyLocallyWeightedLinearRegression {
      // set the method for local regression
         lwl.setClassifier(new LinearRegression());
         // set number of nearest neighbours to be used for local prediction
-        lwl.setKNN(6); // 10 by default
+        lwl.setKNN(6); //Mean absolute error  10->197; 8->185; 6->169; 5->392
         // set weighting kernel method (see comments on constants)
         lwl.setWeightingKernel(LINEAR);
         // set KDTree as nearest neighbour search method
@@ -48,14 +49,16 @@ public class MyLocallyWeightedLinearRegression {
         DataSource train_data = new DataSource(dataFile);
         // 获取训练数据集
         Instances insTrain = train_data.getDataSet();
-        insTrain.deleteStringAttributes();
-//        System.out.println(insTrain.toString());
+        
+        insTrain.deleteStringAttributes(); // remove Date, Time and NOn 
         insTrain.deleteAttributeAt(2); // remove avg_price
+        
 //        insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
         System.out.println(insTrain.toString());
         
         // 设置训练集中，target的index  (测试数据中被预测的字段)
-        insTrain.setClassIndex(1); //insTrain.numAttributes() - 1
+//        insTrain.setClassIndex(1); //insTrain.numAttributes() - 1
+        insTrain.setClass(insTrain.attribute("LowPrice")); 
         // build the classifier
         lwl.buildClassifier(insTrain);
         
@@ -73,15 +76,14 @@ public class MyLocallyWeightedLinearRegression {
             int count = insTrain.numInstances();
             for (int i = 0; i < count; i++) {
                 double ret = lwl.classifyInstance(insTrain.instance(i));
-                System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1));
+                System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1) + ", " + insTrain.instance(i).value(2));
             }
             
-            double[] queryVector = new double[]{7482, 0, 152298, 75200, 10.15};
+            double[] queryVector = new double[]{7482, 0, 152298, 75200, 19.15};
             Instance ins = new SparseInstance(1, queryVector);
             ins.setDataset(insTrain);
             double ret = lwl.classifyInstance(ins);
             System.out.println(ret);
-            
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -86,7 +86,7 @@ public class MyLinearRegression {
         int count = insTrain.numInstances();
         for (int i = 0; i < count; i++) {
         	double ret = lr.classifyInstance(insTrain.instance(i));
-        	System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1));
+        	System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1) + ", " + insTrain.instance(i).value(2));
 		}
         
         return sb.toString();
