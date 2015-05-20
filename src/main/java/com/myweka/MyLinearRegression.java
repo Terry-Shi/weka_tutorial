@@ -62,16 +62,14 @@ public class MyLinearRegression {
         // 获取训练数据集
         Instances insTrain = train_data.getDataSet();
         insTrain.deleteStringAttributes();
-//        System.out.println(insTrain.toString());
-        insTrain.deleteAttributeAt(2);
-        //insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
         System.out.println(insTrain.toString());
         
         // 设置训练集中，target的index  (测试数据中被预测的字段)
-        insTrain.setClassIndex(1); //insTrain.numAttributes() - 1
+        //insTrain.setClassIndex(1); //insTrain.numAttributes() - 1
+        insTrain.setClass(insTrain.attribute("AvgDistance")); 
         // 定义分类器的类型 , 我们采用线性回归
         LinearRegression lr = new LinearRegression();
-        lr.setEliminateColinearAttributes(false);
+        //lr.setEliminateColinearAttributes(false);
         // 训练分类器
         lr.buildClassifier(insTrain);
         
@@ -86,7 +84,7 @@ public class MyLinearRegression {
         int count = insTrain.numInstances();
         for (int i = 0; i < count; i++) {
         	double ret = lr.classifyInstance(insTrain.instance(i));
-        	System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1) + ", " + insTrain.instance(i).value(2));
+        	System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(insTrain.attribute("AvgDistance"))  );
 		}
         
         return sb.toString();

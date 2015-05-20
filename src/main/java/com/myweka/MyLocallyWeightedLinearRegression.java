@@ -39,26 +39,23 @@ public class MyLocallyWeightedLinearRegression {
      // set the method for local regression
         lwl.setClassifier(new LinearRegression());
         // set number of nearest neighbours to be used for local prediction
-        lwl.setKNN(6); //Mean absolute error  10->197; 8->185; 6->169; 5->392
+        lwl.setKNN(5); //
         // set weighting kernel method (see comments on constants)
         lwl.setWeightingKernel(LINEAR);
         // set KDTree as nearest neighbour search method
         lwl.setNearestNeighbourSearchAlgorithm(new KDTree());
         
-     // 读训练数据
+        // 读训练数据
         DataSource train_data = new DataSource(dataFile);
         // 获取训练数据集
         Instances insTrain = train_data.getDataSet();
         
-        insTrain.deleteStringAttributes(); // remove Date, Time and NOn 
-        insTrain.deleteAttributeAt(2); // remove avg_price
+        insTrain.deleteStringAttributes(); // if you want to filter out any attribute, set it's type to string
         
-//        insTrain.deleteAttributeAt(insTrain.numAttributes() - 1);
         System.out.println(insTrain.toString());
         
-        // 设置训练集中，target的index  (测试数据中被预测的字段)
-//        insTrain.setClassIndex(1); //insTrain.numAttributes() - 1
-        insTrain.setClass(insTrain.attribute("LowPrice")); 
+        // 设置训练集中，target的index(被预测的字段)
+        insTrain.setClass(insTrain.attribute("AvgDistance")); 
         // build the classifier
         lwl.buildClassifier(insTrain);
         
@@ -72,23 +69,24 @@ public class MyLocallyWeightedLinearRegression {
             sb.append("评估此结果:" + eval.toSummaryString() + "\n");
             System.out.println(sb.toString());
             
-            //lwl.classifyInstance(instance);
             int count = insTrain.numInstances();
             for (int i = 0; i < count; i++) {
                 double ret = lwl.classifyInstance(insTrain.instance(i));
-                System.out.println("Predict,Actual value = " + (int)ret + ", " + insTrain.instance(i).value(1) + ", " + insTrain.instance(i).value(2));
+                System.out.println("Prediction & Actual for (AvgPrice-WarningPrice)= " + (int)ret + ", " + (insTrain.instance(i).value(insTrain.attribute("AvgDistance"))));
+                //  (insTrain.instance(i).value(insTrain.attribute("LowPrice")) -insTrain.instance(i).value(insTrain.attribute("WarningPrice"))
+                
             }
             
-            double[] queryVector = new double[]{7482, 0, 152298, 75200, 19.15};
+            //7482, 29.50, 152298, 75200
+            double[] queryVector = new double[]{7482, 29.50, 18.37, 0};// FIX: 1. 减小”投放数量“ 没有影响输出 2. 增大“警示价” 输出反而减小
             Instance ins = new SparseInstance(1, queryVector);
             ins.setDataset(insTrain);
             double ret = lwl.classifyInstance(ins);
-            System.out.println(ret);
+            System.out.println("AvgDistance is " + (int)ret + "; Pridict AvgPrice is" + (75200+ (int)ret));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
     
 
 //    /**
