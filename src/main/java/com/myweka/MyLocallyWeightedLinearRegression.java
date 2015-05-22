@@ -10,6 +10,10 @@ import weka.core.SparseInstance;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.neighboursearch.KDTree;
 
+/**
+ * 
+ *
+ */
 public class MyLocallyWeightedLinearRegression {
     /** WEKA LWL object */
     protected static LWL lwl = new LWL();
@@ -39,7 +43,7 @@ public class MyLocallyWeightedLinearRegression {
      // set the method for local regression
         lwl.setClassifier(new LinearRegression());
         // set number of nearest neighbours to be used for local prediction
-        lwl.setKNN(5); //
+        lwl.setKNN(6); //
         // set weighting kernel method (see comments on constants)
         lwl.setWeightingKernel(LINEAR);
         // set KDTree as nearest neighbour search method
@@ -74,15 +78,15 @@ public class MyLocallyWeightedLinearRegression {
                 double ret = lwl.classifyInstance(insTrain.instance(i));
                 System.out.println("Prediction & Actual for (AvgPrice-WarningPrice)= " + (int)ret + ", " + (insTrain.instance(i).value(insTrain.attribute("AvgDistance"))));
                 //  (insTrain.instance(i).value(insTrain.attribute("LowPrice")) -insTrain.instance(i).value(insTrain.attribute("WarningPrice"))
-                
             }
             
-            //7482, 29.50, 152298, 75200
-            double[] queryVector = new double[]{7482, 29.50, 18.37, 0};// FIX: 1. 减小”投放数量“ 没有影响输出 2. 增大“警示价” 输出反而减小
+            // 预测(实际价格-警示价格) ==更准确==> (实际价格-11：29的实时价格)
+            // 7482, 29.50, 152298, 75200
+            double[] queryVector = new double[]{7482, 29.50, 20.37, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
             Instance ins = new SparseInstance(1, queryVector);
             ins.setDataset(insTrain);
             double ret = lwl.classifyInstance(ins);
-            System.out.println("AvgDistance is " + (int)ret + "; Pridict AvgPrice is" + (75200+ (int)ret));
+            System.out.println("AvgDistance is " + (int)ret + "; Pridict AvgPrice is " + (75200+ (int)ret));
         } catch (Exception e) {
             e.printStackTrace();
         }
