@@ -81,8 +81,8 @@ public class MyLocallyWeightedLinearRegression {
             }
             
             // 预测(实际价格-警示价格) ==更准确==> (实际价格-11：29的实时价格)
-            // 7482, 29.50, 152298, 75200
-            double[] queryVector = new double[]{7482, 29.50, 20.37, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
+            // 7482, 156007, 75200
+            double[] queryVector = new double[]{7482,156007,75200, 20.85, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
             Instance ins = new SparseInstance(1, queryVector);
             ins.setDataset(insTrain);
             double ret = lwl.classifyInstance(ins);
