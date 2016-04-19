@@ -59,7 +59,7 @@ public class MyLocallyWeightedLinearRegression {
         System.out.println(insTrain.toString());
         
         // 设置训练集中，target的index(被预测的字段)
-        insTrain.setClass(insTrain.attribute("AvgDistance")); 
+        insTrain.setClass(insTrain.attribute("LowestDistance")); 
         // build the classifier
         lwl.buildClassifier(insTrain);
         
@@ -76,17 +76,17 @@ public class MyLocallyWeightedLinearRegression {
             int count = insTrain.numInstances();
             for (int i = 0; i < count; i++) {
                 double ret = lwl.classifyInstance(insTrain.instance(i));
-                System.out.println("Prediction & Actual for (AvgPrice-WarningPrice)= " + (int)ret + ", " + (insTrain.instance(i).value(insTrain.attribute("AvgDistance"))));
+                System.out.println("Prediction & Actual for (LowestDistance-WarningPrice)= " + (int)ret + ", " + (insTrain.instance(i).value(insTrain.attribute("LowestDistance"))));
                 //  (insTrain.instance(i).value(insTrain.attribute("LowPrice")) -insTrain.instance(i).value(insTrain.attribute("WarningPrice"))
             }
             
-            // 预测(实际价格-警示价格) ==更准确==> (实际价格-11：29的实时价格)
+            // 预测(最后实际价格-警示价格)  更准确的应该是(最后实际价格-11:29:42的实时价格)
             // 7482, 156007, 75200
-            double[] queryVector = new double[]{7482,156007,75200, 20.85, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
+            double[] queryVector = new double[]{7441,176007,75200, 23.14, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
             Instance ins = new SparseInstance(1, queryVector);
             ins.setDataset(insTrain);
             double ret = lwl.classifyInstance(ins);
-            System.out.println("AvgDistance is " + (int)ret + "; Pridict AvgPrice is " + (75200+ (int)ret));
+            System.out.println("Distance is " + (int)ret + "; Pridict LowestDistance is " + (75200+ (int)ret));
         } catch (Exception e) {
             e.printStackTrace();
         }

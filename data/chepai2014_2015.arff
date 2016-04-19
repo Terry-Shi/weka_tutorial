@@ -1,4 +1,4 @@
-% training data for ChePai
+% training data for ChePai －不想分析的数据类型设置为string
 %
 @relation 'ChePai'
 @attribute Date string
@@ -10,8 +10,8 @@
 @attribute PeopleCount numeric
 @attribute WarningPrice numeric
 @attribute radio numeric
-@attribute LowDistance string
-@attribute AvgDistance numeric
+@attribute LowestDistance numeric
+@attribute AvgDistance string
 @data
 %拍卖时间,投放数量,最低成交价,平均成交价,最低成交价截至时间,n,投标人数,警示价格,投标人数/投放数量,最低成交价-警示价格,平均成交价-警示价格
 %2013_1,9000,75000,75332,29.40,65,20857,0,2.317444444,75000,75332
@@ -42,5 +42,5 @@
 2015_2,7653,76500,76618,29.49,73,103224,73700,13.4880439,2800,2918
 2015_3,7406,74600,74830,20.16,6,132690,73700,17.91655415,900,1130
 2015_4,8288,80600,80759,29.41,115,152298,75200,18.37572394,5400,5559
-%2015_5,7482,79000,79099,29:53,20,156007,75200,20.85097567,3800,3899
+2015_5,7482,79000,79099,29:53,20,156007,75200,20.85097567,3800,3899
 
