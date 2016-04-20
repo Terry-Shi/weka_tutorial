@@ -37,7 +37,7 @@ public class MyLocallyWeightedLinearRegression {
     /** Constant weighting function. */
     public static final int CONSTANT = 5;
     
-    public static String dataFile = "data/chepai2014_2015.arff";
+    public static String dataFile = "data/chepai2015_2016.arff";
     
     public static void main(String[] args) throws Exception {
      // set the method for local regression
@@ -80,13 +80,12 @@ public class MyLocallyWeightedLinearRegression {
                 //  (insTrain.instance(i).value(insTrain.attribute("LowPrice")) -insTrain.instance(i).value(insTrain.attribute("WarningPrice"))
             }
             
-            // 预测(最后实际价格-警示价格)  更准确的应该是(最后实际价格-11:29:42的实时价格)
-            // 7482, 156007, 75200
-            double[] queryVector = new double[]{7441,176007,75200, 23.14, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
+            // 预测(最后实际价格-11:29:42的实时价格)
+            double[] queryVector = new double[]{11829,266007, 0};// FIX: 1. 增大”投放数量“ 反而减小输出值。
             Instance ins = new SparseInstance(1, queryVector);
             ins.setDataset(insTrain);
             double ret = lwl.classifyInstance(ins);
-            System.out.println("Distance is " + (int)ret + "; Pridict LowestDistance is " + (75200+ (int)ret));
+            System.out.println("预测需要加价 ： " + (int)ret);
         } catch (Exception e) {
             e.printStackTrace();
         }
